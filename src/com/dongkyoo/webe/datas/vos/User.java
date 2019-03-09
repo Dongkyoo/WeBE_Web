@@ -1,4 +1,4 @@
-package com.dongkyoo.webe.vos;
+package com.dongkyoo.webe.datas.vos;
 
 import org.apache.ibatis.type.Alias;
 

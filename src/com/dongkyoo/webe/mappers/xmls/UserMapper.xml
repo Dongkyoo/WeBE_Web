@@ -5,12 +5,17 @@
 
 <mapper namespace="com.dongkyoo.webe.mappers.UserMapper">
 
-    <sql id="UserColumns">
+    <sql id="UserAllColumns">
         ID, PASSWORD, SALT, EMAIL, GOOGLE_ID
     </sql>
 
+    <!-- Select 쿼리용 -->
+    <sql id="UserColumns">
+        ID, EMAIL, GOOGLE_ID
+    </sql>
+
     <insert id="insertUser">
-        INSERT INTO tbl_users(<include refid="UserColumns"/>)
+        INSERT INTO tbl_users(<include refid="UserAllColumns"/>)
         VALUES(#{id}, #{password}, #{salt}, #{email}, #{googleId})
     </insert>
 
@@ -18,6 +23,20 @@
         SELECT <include refid="UserColumns"/>
         FROM tbl_users
         WHERE id = #{id}
+    </select>
+
+    <select id="isExist" resultType="Boolean">
+        SELECT
+          COUNT(id)
+        FROM tbl_users
+        WHERE id = #{userId}
+    </select>
+
+    <select id="selectPasswordSalt" resultType="PasswordSaltDto">
+        SELECT
+          password, salt
+        FROM tbl_users
+        WHERE id = #{userId}
     </select>
 
 </mapper>
