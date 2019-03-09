@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dongkyoo.webe.mappers.UserMapper">
+
+    <sql id="UserColumns">
+        ID, PASSWORD, SALT, EMAIL, GOOGLE_ID
+    </sql>
+
+    <insert id="insertUser">
+        INSERT INTO tbl_users(<include refid="UserColumns"/>)
+        VALUES(#{id}, #{password}, #{salt}, #{email}, #{googleId})
+    </insert>
+
+    <select id="selectUser" resultType="User">
+        SELECT <include refid="UserColumns"/>
+        FROM tbl_users
+        WHERE id = #{id}
+    </select>
+
+</mapper>

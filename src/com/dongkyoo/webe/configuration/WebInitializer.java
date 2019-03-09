@@ -15,7 +15,7 @@ import javax.servlet.ServletRegistration;
 public class WebInitializer implements WebApplicationInitializer {
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
         webContext.register(RootConfig.class);
 
@@ -31,5 +31,11 @@ public class WebInitializer implements WebApplicationInitializer {
         FilterRegistration.Dynamic filter = servletContext.addFilter("endcodingFilter", CharacterEncodingFilter.class);
         filter.setInitParameter("encoding", "UTF-8");
         filter.addMappingForServletNames(null, false, "dispatcher");
+
+        // log4j 설정
+        servletContext.setInitParameter("isLog4jAutoInitializationDisabled", "true");
+        servletContext.setInitParameter("log4jContextName", "WeBE");
+        servletContext.setInitParameter("log4jConfiguration", "file://log4j2.xml");
+
     }
 }
