@@ -2,9 +2,50 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.dongkyoo.webe.mappers.ScheduleMapper">
 
+    <sql id="ScheduleColumn">
+      id, group_id groupId, start_date startDate, end_date endDate, title, content, repeat
+    </sql>
 
+    <resultMap id="ScheduleMap" type="Schedule">
+        <id property="id" column="id"/>
+        <result property="startDate" column="startDate"/>
+        <result property="endDate" column="endDate"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="repeat" column="repeat"/>
+        <association property="group" column="{ id = groupId }" select="com.dongkyoo.webe.mappers.GroupMapper.selectGroup"/>
+    </resultMap>
+
+    <insert id="insertSchedule">
+      <selectKey keyProperty="id" resultType="Integer" order="BEFORE">
+        SELECT tbl_group_schedules_seq.NEXTVAL FROM DUAL
+      </selectKey>
+      INSERT INTO tbl_group_schedules
+      VALUES (#{id}, #{group.id}, #{startDate}, #{endDate}, #{title}, #{content}, #{repeat})
+    </insert>
+
+    <select id="selectSchedule" resultMap="ScheduleMap">
+      SELECT <include refid="ScheduleColumn"/>
+      FROM tbl_group_schedules
+      WHERE id = #{id}
+    </select>
+
+    <update id="modifySchedule">
+      UPDATE tbl_group_schedules
+      SET
+        start_date = #{schedule.startDate},
+        end_date = #{schedule.endDate},
+        title = #{schedule.title},
+        content = #{schedule.content},
+        repeat = #{schedule.repeat}
+      WHERE id = #{id}
+    </update>
+
+    <delete id="deleteSchedule">
+        DELETE tbl_group_schedules
+        WHERE id = #{id}
+    </delete>
 
 </mapper>
