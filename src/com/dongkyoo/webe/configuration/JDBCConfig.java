@@ -2,6 +2,7 @@ package com.dongkyoo.webe.configuration;
 
 import oracle.jdbc.pool.OracleDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +52,14 @@ public class JDBCConfig {
         sqlSessionFactory.setDataSource(dataSource());
         sqlSessionFactory.setTypeAliasesPackage("com.dongkyoo.webe.datas");
         sqlSessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:com/dongkyoo/webe/mappers/xmls/*.xml"));
+        sqlSessionFactory.setConfiguration(getConfiguration());
+
         return sqlSessionFactory.getObject();
+    }
+
+    public org.apache.ibatis.session.Configuration getConfiguration() {
+        org.apache.ibatis.session.Configuration c = new org.apache.ibatis.session.Configuration();
+        c.setJdbcTypeForNull(JdbcType.VARCHAR);
+        return c;
     }
 }

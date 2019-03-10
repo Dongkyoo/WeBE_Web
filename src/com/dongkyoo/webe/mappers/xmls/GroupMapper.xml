@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dongkyoo.webe.mappers.GroupMapper">
+
+    <sql id="GroupColumn">
+        id, name, description, title_img titleImageUri, is_public isPublic
+    </sql>
+
+    <insert id="insertGroup" parameterType="Group">
+        <selectKey resultType="Integer" keyProperty="id" order="BEFORE">
+          SELECT tbl_groups_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO tbl_groups
+        VALUES (#{id}, #{name}, #{description}, #{titleImageUri}, #{isPublic})
+    </insert>
+
+    <select id="selectGroup" resultType="Group">
+        SELECT <include refid="GroupColumn"/>
+        FROM tbl_groups
+        WHERE id = #{id}
+    </select>
+
+    <delete id="deleteGroup">
+        DELETE tbl_groups
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateGroup">
+        UPDATE tbl_groups
+        SET
+          name = #{group.name},
+          description = #{group.description},
+          title_img = #{group.titleImageUri},
+          is_public = #{group.isPublic}
+        WHERE id = #{id}
+    </update>
+</mapper>
